@@ -1,0 +1,38 @@
+{
+  "employers": [
+    {
+      "id": "emp_1783810444752",
+      "name": "King Soopers",
+      "jobsUrl": "https://www.kroger.com/careers",
+      "jobTypes": [
+        "retail",
+        "warehouse",
+        "customer-service"
+      ],
+      "notes": "Frequently hires immigrants, multiple locations in Denver metro",
+      "addedAt": "2026-07-11T22:54:04.752Z"
+    },
+    {
+      "id": "emp_1783810462745",
+      "name": "Denver International Airport",
+      "jobsUrl": "https://www.flydenver.com/jobs/search/?",
+      "jobTypes": [
+        "customer-service",
+        "warehouse",
+        "maintenance",
+        "food-service"
+      ],
+      "notes": "Major employer, good benefits, frequently hires for entry-level positions",
+      "addedAt": "2026-07-11T22:54:22.745Z"
+    },
+    {
+      "id": "emp_1783811022884",
+      "name": "Walmart",
+      "jobsUrl": "https://careers.walmart.com/us/en/results?searchQuery=All&careerareas=Stores%2FClubs",
+      "jobTypes": [
+        "cashier,stocker"
+      ],
+      "addedAt": "2026-07-11T23:03:42.884Z"
+    }
+  ]
+}

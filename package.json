@@ -1,0 +1,46 @@
+{
+  "name": "job-hunting-companion",
+  "version": "1.0.0",
+  "description": "Plugin-based extraction system for job seeker information - agnostic LLM companion tool",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    },
+    "./cli": "./dist/cli/job-companion.js",
+    "./mcp-server": "./dist/mcp-server/server.js"
+  },
+  "bin": {
+    "job-companion": "./dist/cli/job-companion.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "cli": "node dist/cli/job-companion.js",
+    "mcp-server": "node dist/mcp-server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "job-hunting",
+    "employment",
+    "intake",
+    "mcp",
+    "llm",
+    "extraction",
+    "companion"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@types/node": "^26.1.1",
+    "commander": "^15.0.0",
+    "playwright": "^1.49.0",
+    "typescript": "^7.0.2",
+    "zod": "^4.4.3"
+  }
+}

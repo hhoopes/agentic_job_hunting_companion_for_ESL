@@ -1,0 +1,346 @@
+{
+  "schemaVersion": "1.0.0",
+  "handoffId": "handoff_1783805580576",
+  "timestamp": "2026-07-11T21:33:00.576Z",
+  "subject": {
+    "id": "subject_1783805580573",
+    "createdAt": "2026-07-11T21:33:00.573Z",
+    "updatedAt": "2026-07-11T21:33:00.576Z",
+    "name": "Ana Rodriguez"
+  },
+  "extractions": {
+    "demographics-extractor": {
+      "success": true,
+      "data": {
+        "location": {
+          "streetAddress": "8750 Washington Street",
+          "city": "Thornton",
+          "state": "Colorado",
+          "zipCode": "80229",
+          "county": "Adams County"
+        },
+        "ageRange": "30-39",
+        "accessibilityNeeds": [],
+        "scheduleConstraints": [
+          {
+            "type": "childcare",
+            "description": "Two children (ages 5 and 8) - schedule must align with school hours",
+            "daysAffected": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "timeRange": { "start": "8:00 AM", "end": "3:30 PM" },
+            "flexibility": "some"
+          }
+        ],
+        "languages": ["Spanish", "English"],
+        "household": {
+          "adults": 1,
+          "children": 2,
+          "childrenAges": [5, 8]
+        }
+      },
+      "extractedFields": ["location", "ageRange", "scheduleConstraints", "languages", "household"],
+      "missingFields": ["accessibilityNeeds"],
+      "ambiguousFields": [],
+      "confidence": 0.92,
+      "durationMs": 1240,
+      "errors": [],
+      "followUpQuestions": []
+    },
+    "experience-extractor": {
+      "success": true,
+      "data": {
+        "workHistory": [
+          {
+            "employer": "Walmart",
+            "title": "Cashier",
+            "startDate": "2019-01-01",
+            "endDate": "2022-01-01",
+            "current": false,
+            "responsibilities": [
+              "Operated cash register and processed customer transactions",
+              "Handled returns and exchanges",
+              "Maintained clean and organized checkout area",
+              "Assisted customers with questions and product location"
+            ],
+            "skillsUsed": ["cash register", "POS systems", "customer service", "cash handling", "bilingual communication"]
+          },
+          {
+            "employer": "Local Restaurant",
+            "title": "Waitress",
+            "startDate": "2017-03-01",
+            "endDate": "2019-01-01",
+            "current": false,
+            "responsibilities": [
+              "Took food and drink orders from customers",
+              "Served meals and beverages promptly",
+              "Handled cash and credit card payments",
+              "Maintained cleanliness of dining area",
+              "Communicated with kitchen staff about orders"
+            ],
+            "skillsUsed": ["customer service", "cash handling", "multitasking", "bilingual communication", "food service"]
+          }
+        ],
+        "totalYearsExperience": 5,
+        "industries": ["retail", "food service"],
+        "hardSkills": ["cash register operation", "POS systems", "cash handling", "food service", "bilingual (Spanish/English)"],
+        "softSkills": ["customer service", "multitasking", "communication", "reliability", "teamwork"],
+        "certifications": [],
+        "education": [
+          {
+            "institution": "Local High School",
+            "degree": "High School Diploma",
+            "completed": true
+          }
+        ],
+        "achievements": ["5 years of consistent employment in customer-facing roles"],
+        "summary": "Experienced customer service professional with 5 years in retail and food service. Bilingual Spanish/English speaker with strong cash handling and POS skills. Reliable team player seeking full-time day shift position."
+      },
+      "extractedFields": ["workHistory", "industries", "hardSkills", "softSkills", "education", "achievements", "summary"],
+      "missingFields": ["certifications"],
+      "ambiguousFields": [],
+      "confidence": 0.88,
+      "durationMs": 1580,
+      "errors": [],
+      "followUpQuestions": []
+    },
+    "transportation-extractor": {
+      "success": true,
+      "data": {
+        "primaryMethod": "public_transit",
+        "availableMethods": ["public_transit", "walk"],
+        "vehicle": {
+          "hasVehicle": false
+        },
+        "publicTransit": {
+          "hasAccess": true,
+          "routes": ["RTD Bus"],
+          "passType": "Monthly pass",
+          "limitations": []
+        },
+        "maxCommuteTime": { "value": 30, "unit": "minutes" },
+        "commuteFlexibility": "some",
+        "relocationWilling": false,
+        "relocationConstraints": ["Has school-age children in Thornton area"]
+      },
+      "extractedFields": ["primaryMethod", "availableMethods", "vehicle", "publicTransit", "maxCommuteTime", "commuteFlexibility", "relocationWilling"],
+      "missingFields": [],
+      "ambiguousFields": [],
+      "confidence": 0.95,
+      "durationMs": 890,
+      "errors": [],
+      "followUpQuestions": []
+    },
+    "preferences-extractor": {
+      "success": true,
+      "data": {
+        "jobTypes": ["full_time"],
+        "preferredIndustries": ["retail", "food service", "office/administrative"],
+        "avoidedIndustries": ["construction", "warehouse"],
+        "minimumPay": { "amount": 18, "period": "hour" },
+        "workEnvironment": "onsite",
+        "shiftPreference": ["day"],
+        "learningWillingness": true
+      },
+      "extractedFields": ["jobTypes", "preferredIndustries", "avoidedIndustries", "minimumPay", "workEnvironment", "shiftPreference", "learningWillingness"],
+      "missingFields": [],
+      "ambiguousFields": [],
+      "confidence": 0.94,
+      "durationMs": 1020,
+      "errors": [],
+      "followUpQuestions": []
+    }
+  },
+  "mergedProfile": {
+    "demographics": {
+      "location": {
+        "streetAddress": "8750 Washington Street",
+        "city": "Thornton",
+        "state": "Colorado",
+        "zipCode": "80229",
+        "county": "Adams County"
+      },
+      "ageRange": "30-39",
+      "accessibilityNeeds": [],
+      "scheduleConstraints": [
+        {
+          "type": "childcare",
+          "description": "Two children (ages 5 and 8) - schedule must align with school hours",
+          "daysAffected": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "timeRange": { "start": "8:00 AM", "end": "3:30 PM" },
+          "flexibility": "some"
+        }
+      ],
+      "languages": ["Spanish", "English"],
+      "household": {
+        "adults": 1,
+        "children": 2,
+        "childrenAges": [5, 8]
+      }
+    },
+    "experience": {
+      "workHistory": [
+        {
+          "employer": "Walmart",
+          "title": "Cashier",
+          "startDate": "2019-01-01",
+          "endDate": "2022-01-01",
+          "current": false,
+          "responsibilities": [
+            "Operated cash register and processed customer transactions",
+            "Handled returns and exchanges",
+            "Maintained clean and organized checkout area",
+            "Assisted customers with questions and product location"
+          ],
+          "skillsUsed": ["cash register", "POS systems", "customer service", "cash handling", "bilingual communication"]
+        },
+        {
+          "employer": "Local Restaurant",
+          "title": "Waitress",
+          "startDate": "2017-03-01",
+          "endDate": "2019-01-01",
+          "current": false,
+          "responsibilities": [
+            "Took food and drink orders from customers",
+            "Served meals and beverages promptly",
+            "Handled cash and credit card payments",
+            "Maintained cleanliness of dining area",
+            "Communicated with kitchen staff about orders"
+          ],
+          "skillsUsed": ["customer service", "cash handling", "multitasking", "bilingual communication", "food service"]
+        }
+      ],
+      "totalYearsExperience": 5,
+      "industries": ["retail", "food service"],
+      "hardSkills": ["cash register operation", "POS systems", "cash handling", "food service", "bilingual (Spanish/English)"],
+      "softSkills": ["customer service", "multitasking", "communication", "reliability", "teamwork"],
+      "certifications": [],
+      "education": [
+        {
+          "institution": "Local High School",
+          "degree": "High School Diploma",
+          "completed": true
+        }
+      ],
+      "achievements": ["5 years of consistent employment in customer-facing roles"],
+      "summary": "Experienced customer service professional with 5 years in retail and food service. Bilingual Spanish/English speaker with strong cash handling and POS skills. Reliable team player seeking full-time day shift position."
+    },
+    "transportation": {
+      "primaryMethod": "public_transit",
+      "availableMethods": ["public_transit", "walk"],
+      "vehicle": {
+        "hasVehicle": false
+      },
+      "publicTransit": {
+        "hasAccess": true,
+        "routes": ["RTD Bus"],
+        "passType": "Monthly pass",
+        "limitations": []
+      },
+      "maxCommuteTime": { "value": 30, "unit": "minutes" },
+      "commuteFlexibility": "some",
+      "relocationWilling": false,
+      "relocationConstraints": ["Has school-age children in Thornton area"]
+    },
+    "preferences": {
+      "jobTypes": ["full_time"],
+      "preferredIndustries": ["retail", "food service", "office/administrative"],
+      "avoidedIndustries": ["construction", "warehouse"],
+      "minimumPay": { "amount": 18, "period": "hour" },
+      "workEnvironment": "onsite",
+      "shiftPreference": ["day"],
+      "learningWillingness": true
+    },
+    "constraints": {}
+  },
+  "gaps": [
+    {
+      "category": "demographics-extractor",
+      "field": "accessibilityNeeds",
+      "importance": "nice_to_have",
+      "reason": "Could not extract accessibilityNeeds from demographics-extractor",
+      "suggestedQuestion": "Do you have any accessibility requirements for your workplace?"
+    },
+    {
+      "category": "experience-extractor",
+      "field": "certifications",
+      "importance": "important",
+      "reason": "Could not extract certifications from experience-extractor",
+      "suggestedQuestion": "Do you have any professional certifications or licenses?"
+    }
+  ],
+  "recommendations": [
+    {
+      "action": "Search for bilingual cashier/retail positions in Thornton and north Denver metro area",
+      "priority": "high",
+      "rationale": "Bilingual skills are a strong differentiator in customer-facing roles",
+      "agentType": "job-searcher",
+      "estimatedEffort": "15 minutes"
+    },
+    {
+      "action": "Filter jobs within 30-minute RTD bus commute from 80229 (Thornton)",
+      "priority": "high",
+      "rationale": "No vehicle - public transit is the only reliable commute option",
+      "agentType": "job-searcher",
+      "estimatedEffort": "5 minutes"
+    },
+    {
+      "action": "Filter for day shift positions compatible with school hours (8 AM - 3:30 PM)",
+      "priority": "high",
+      "rationale": "Childcare constraints require schedule alignment with school hours",
+      "agentType": "job-searcher",
+      "estimatedEffort": "5 minutes"
+    },
+    {
+      "action": "Apply to Walmart, Target, and grocery stores (King Soopers, Safeway)",
+      "priority": "high",
+      "rationale": "Previous Walmart experience makes these strong targets",
+      "agentType": "job-searcher",
+      "estimatedEffort": "30 minutes"
+    },
+    {
+      "action": "Consider food service positions with day shifts (cafeterias, fast casual)",
+      "priority": "medium",
+      "rationale": "Restaurant experience transfers well; day shifts align with childcare needs",
+      "agentType": "job-searcher",
+      "estimatedEffort": "20 minutes"
+    },
+    {
+      "action": "Exclude construction and warehouse positions",
+      "priority": "medium",
+      "rationale": "Candidate explicitly avoids physically demanding work",
+      "agentType": "job-searcher",
+      "estimatedEffort": "1 minute"
+    },
+    {
+      "action": "Highlight bilingual skills prominently on resume and applications",
+      "priority": "high",
+      "rationale": "Spanish/English bilingual is highly valued in north Denver metro service industry",
+      "agentType": "resume-builder",
+      "estimatedEffort": "10 minutes"
+    },
+    {
+      "action": "Explore RTD bus routes near target employers",
+      "priority": "medium",
+      "rationale": "Verify commute feasibility for specific job locations",
+      "agentType": "logistics-planner",
+      "estimatedEffort": "15 minutes"
+    }
+  ],
+  "metadata": {
+    "pluginsUsed": [
+      "demographics-extractor",
+      "experience-extractor",
+      "transportation-extractor",
+      "preferences-extractor"
+    ],
+    "extractionTimes": {
+      "demographics-extractor": "2026-07-11T21:33:00.575Z",
+      "experience-extractor": "2026-07-11T21:33:00.575Z",
+      "transportation-extractor": "2026-07-11T21:33:00.576Z",
+      "preferences-extractor": "2026-07-11T21:33:00.576Z"
+    },
+    "overallConfidence": 0.92,
+    "interactionCount": 2,
+    "language": "es",
+    "transcript": "Me llamo Ana Rodriguez. Vivo en el 8750 Washington Street, Thornton, Colorado 80229. Tengo 34 años. Hablo español e inglés. Tengo dos hijos, uno de 5 años y otro de 8, así que necesito horarios que se ajusten a la escuela. No tengo coche propio pero puedo tomar el autobús RTD, tengo pase mensual. Puedo viajar hasta 30 minutos en bus. Busco trabajo de tiempo completo, preferiblemente de día. Necesito ganar por lo menos 18 dólares la hora. Antes trabajé como cajera en Walmart por 3 años y también como mesera en un restaurante por 2 años. Sé usar cajas registradoras, sistemas de punto de venta, y atención al cliente. Tengo mi diploma de preparatoria. Estoy dispuesta a aprender cosas nuevas en el trabajo.\n\nNo tengo restricciones de horario más allá de la escuela de mis hijos. Puedo trabajar fines de semana si es necesario. No tengo certificaciones especiales pero aprendo rápido. Me gustaría trabajar en retail, restaurantes, o oficinas. No me gustan los trabajos de construcción o almacén porque son muy pesados."
+  }
+}

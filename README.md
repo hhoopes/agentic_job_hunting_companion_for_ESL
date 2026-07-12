@@ -42,6 +42,47 @@ Job Hunting Agents
 
 ## Quick Start
 
+### Installation
+
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd job-hunting-skills
+
+# Install dependencies
+npm install
+
+# Install Playwright browsers (for job scraping)
+npx playwright install chromium
+
+# Build the project
+npm run build
+
+# Set up your LLM API key (choose one)
+export OPENAI_API_KEY=sk-...
+# or
+export ANTHROPIC_API_KEY=sk-ant-...
+# or
+export LLM_API_KEY=your-key-here
+```
+
+### Basic Usage
+
+```bash
+# 1. Run interactive intake (conversational extraction)
+npm run cli -- intake -l es --provider anthropic --api-key $ANTHROPIC_API_KEY --model claude-3-5-sonnet-20241022
+
+# 2. Search for jobs matching the profile
+npm run cli -- search samples/heidi-hoopes-handoff.json -n 20
+
+# 3. Search Craigslist + preferred employers
+npm run cli -- search samples/heidi-hoopes-handoff.json --preferred-employers -n 50
+
+# 4. Manage preferred employers
+npm run cli -- add-employer "King Soopers" "https://www.kroger.com/careers" retail
+npm run cli -- list-employers
+```
+
 ### As a Library
 
 ```typescript
@@ -122,6 +163,88 @@ Available tools:
 - `generate_follow_up_questions` - Create follow-up questions
 - `get_prompt_template` - Get prompts for use in other LLMs
 - `merge_to_handoff` - Package extractions for agents
+
+## Job Search Features
+
+The companion includes a job search system that finds relevant positions based on the extracted profile.
+
+### Searching for Jobs
+
+```bash
+# Search Craigslist for jobs matching a profile
+npm run cli -- search samples/heidi-hoopes-handoff.json -n 20
+
+# Search Craigslist + preferred employers
+npm run cli -- search samples/heidi-hoopes-handoff.json --preferred-employers -n 50
+
+# Save results to file
+npm run cli -- search samples/heidi-hoopes-handoff.json --preferred-employers -o results.json
+```
+
+### How It Works
+
+1. **Reads the handoff profile** - Extracts location, skills, experience, transportation constraints
+2. **Generates search queries** - Based on job titles, skills, and industries from the profile
+3. **Searches Craigslist** - Finds jobs within the commute radius
+4. **Searches preferred employers** - Scrapes job listings from configured employer sites
+5. **Scores and ranks jobs** - Based on:
+   - Experience match (job title, skills, industries)
+   - Commute feasibility (transit time from home address)
+   - Pay requirements
+   - Shift preferences
+6. **Returns ranked results** - Top matches with commute times and scores
+
+### Transit Scoring
+
+The system uses geocoding and distance calculations to estimate commute times:
+- Geocodes home address and job locations using OpenStreetMap Nominatim
+- Calculates straight-line distance
+- Estimates transit time (assuming ~18 mph for bus transit)
+- Penalizes or excludes jobs outside the max commute time
+
+**Note:** This is a heuristic based on distance. For production use, you'd want to integrate with a real transit API like Google Maps or RTD's GTFS data.
+
+### Preferred Employers
+
+You can configure a list of employers that frequently hire immigrants or have good entry-level positions.
+
+```bash
+# Add a preferred employer
+npm run cli -- add-employer "King Soopers" "https://www.kroger.com/careers" retail warehouse customer-service
+
+# List all preferred employers
+npm run cli -- list-employers
+
+# Remove an employer
+npm run cli -- remove-employer emp_1234567890
+```
+
+**Currently working scrapers:**
+- ✅ **Craigslist** - 286 jobs found, scored, and ranked
+- ✅ **Denver International Airport** - 21 jobs extracted from `.jobCard` elements
+- ✅ **Walmart** - 10 jobs extracted from GraphQL API
+
+**Blocked:**
+- ⚠️ **King Soopers** - HTTP2 errors (anti-bot protection)
+
+### Example Output
+
+```
+=== Top 10 Job Matches ===
+
+1. [+95] Seeking Cashier / Front of House Team Members (Denver Metro Area)
+   📍 Multiple locations
+   🚌 25 min transit, 7.2 mi
+   🔗 https://denver.craigslist.org/...
+
+2. [+50] HIRING DISHWASHERS/FOOD PREP! $18/HR + TIPS
+   📍 Westminster
+   🚌 21 min transit, 3.4 mi
+   🔗 https://denver.craigslist.org/...
+
+3. [+40] $20~21 Line cook need - Immediate hire PM
+   🔗 https://denver.craigslist.org/...
+```
 
 ## LLM Setup
 

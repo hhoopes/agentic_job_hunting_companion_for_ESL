@@ -83,6 +83,42 @@ npm run cli -- add-employer "King Soopers" "https://www.kroger.com/careers" reta
 npm run cli -- list-employers
 ```
 
+### Voice mode (optional)
+
+`intake --voice-mode` listens on the mic instead of the keyboard. Speech-activity detection is done in-process (Silero VAD); transcription is offloaded to a local Python sidecar wrapping [openai-whisper](https://github.com/openai/whisper), so the model stays resident between utterances.
+
+**One-time setup:**
+
+```bash
+# Native audio capture
+brew install sox
+
+# Python sidecar deps (uses the openai-whisper you already installed)
+pip install fastapi uvicorn python-multipart
+# or, if you use uv:  uv pip install fastapi uvicorn python-multipart
+```
+
+**Every time you use voice mode**, start the sidecar in one terminal:
+
+```bash
+python scripts/whisper_server.py --model small
+# use --model medium for better Arabic accuracy at ~3x latency
+```
+
+Then in another terminal:
+
+```bash
+# Speak Arabic → get Arabic text into the pipeline
+npm run cli -- intake -l ar --voice-mode --provider opencode --api-key $ZEN_API_KEY --model claude-sonnet-4-5
+
+# Speak any language → get English text (Whisper's built-in translate task)
+npm run cli -- intake -l en --voice-mode --voice-translate --provider ...
+```
+
+You can still type — readline stays live alongside the mic. `/done` finishes as usual.
+
+**Tuning knob for non-English languages:** Arabic (and other languages with soft-onset fricatives) sometimes gets word-initial clipping with Silero's defaults. If you notice it, the thresholds live in `src/voice/vad-session.ts` — try `positiveSpeechThreshold: 0.35` and `preSpeechPadFrames: 3`.
+
 ### As a Library
 
 ```typescript

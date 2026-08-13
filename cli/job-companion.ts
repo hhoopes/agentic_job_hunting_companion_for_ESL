@@ -23,6 +23,7 @@ import {
   AnthropicClient,
   probeLanguageSupport,
 } from '../src/llm/index.js';
+import { startVoiceSession, type VoiceSession } from '../src/voice/index.js';
 
 function createLLMClient(options: any): LLMClient | undefined {
   const provider = options.provider || process.env.LLM_PROVIDER || 'openai';
@@ -98,7 +99,7 @@ program
   .option('--timeout <ms>', 'Timeout in milliseconds', '30000')
   .option('--follow-ups', 'Generate follow-up questions for gaps', true)
   .option('--provider <provider>', 'LLM provider (openai, anthropic, groq, ollama, opencode)', process.env.LLM_PROVIDER || 'openai')
-  .option('--api-key <key>', 'LLM API key', process.env.LLM_API_KEY)
+  .option('--api-key <key>', 'LLM API key (or set LLM_API_KEY/OPENAI_API_KEY/ANTHROPIC_API_KEY)')
   .option('--model <model>', 'LLM model name', process.env.LLM_MODEL || 'gpt-4o-mini')
   .option('--base-url <url>', 'LLM API base URL (for proxies/local models)', process.env.LLM_BASE_URL)
   .option('--probe', 'Probe LLM language support before extraction (for non-English)', false)
@@ -287,7 +288,7 @@ program
   .description('Test if the configured LLM supports a target language for extraction')
   .option('-l, --language <lang>', 'Language code to test (es, fr, de, zh, ar, etc.)', 'es')
   .option('--provider <provider>', 'LLM provider (openai, anthropic, groq, ollama, opencode)', process.env.LLM_PROVIDER || 'openai')
-  .option('--api-key <key>', 'LLM API key', process.env.LLM_API_KEY)
+  .option('--api-key <key>', 'LLM API key (or set LLM_API_KEY/OPENAI_API_KEY/ANTHROPIC_API_KEY)')
   .option('--model <model>', 'LLM model name', process.env.LLM_MODEL || 'gpt-4o-mini')
   .option('--base-url <url>', 'LLM API base URL', process.env.LLM_BASE_URL)
   .option('-v, --verbose', 'Show raw LLM response and match details', false)
@@ -522,9 +523,11 @@ program
   .option('--flag-ambiguity', 'Flag ambiguous information', true)
   .option('--timeout <ms>', 'Timeout in milliseconds', '30000')
   .option('--follow-ups', 'Generate follow-up questions for gaps', true)
-  .option('--voice-mode', 'Optimize prompts for voice/dictation input', false)
+  .option('--voice-mode', 'Listen on the mic and transcribe via local Whisper sidecar (requires scripts/whisper_server.py running)', false)
+  .option('--voice-translate', 'Whisper task=translate — force English output regardless of spoken language', false)
+  .option('--whisper-url <url>', 'Whisper sidecar base URL', 'http://127.0.0.1:8080')
   .option('--provider <provider>', 'LLM provider (openai, anthropic, groq, ollama, opencode)', process.env.LLM_PROVIDER || 'openai')
-  .option('--api-key <key>', 'LLM API key', process.env.LLM_API_KEY)
+  .option('--api-key <key>', 'LLM API key (or set LLM_API_KEY/OPENAI_API_KEY/ANTHROPIC_API_KEY)')
   .option('--model <model>', 'LLM model name', process.env.LLM_MODEL || 'gpt-4o-mini')
   .option('--base-url <url>', 'LLM API base URL (for proxies/local models)', process.env.LLM_BASE_URL)
   .option('--probe', 'Probe LLM language support before extraction (for non-English)', false)
@@ -698,6 +701,46 @@ program
       }
     };
 
+    // Dispatch a completed transcript (from voice OR readline) through the same
+    // handlers. Keeps a single source of truth for follow-up vs. initial input.
+    const handleUtterance = async (text: string): Promise<void> => {
+      const trimmed = text.trim();
+      if (!trimmed) return;
+      if (inFollowUpLoop) {
+        await processFollowUpAnswer(trimmed);
+      } else {
+        paragraphBuffer.push(trimmed);
+        fullTranscript += (fullTranscript ? '\n' : '') + trimmed;
+        await runFullExtraction(fullTranscript);
+      }
+    };
+
+    let voice: VoiceSession | undefined;
+    if (options.voiceMode) {
+      const listeningMsg = lang === 'es'
+        ? '\n🎙  Modo voz activo. Habla libremente — o escribe /done cuando termines.\n'
+        : lang === 'ar'
+          ? '\n🎙  وضع الصوت مفعّل. تحدّث بحرية — أو اكتب ‎/done عند الانتهاء.\n'
+          : '\n🎙  Voice mode on. Speak freely — or type /done when finished.\n';
+      console.error(listeningMsg);
+      try {
+        voice = await startVoiceSession({
+          language: lang,
+          task: options.voiceTranslate ? 'translate' : 'transcribe',
+          whisperBaseUrl: options.whisperUrl,
+          onSpeechStart: () => process.stderr.write('•'),  // one dot per utterance start
+          onText: async (text) => {
+            console.error(`\n🗣  ${text}`);
+            await handleUtterance(text);
+          },
+          onError: (err) => console.error('\nvoice error:', err instanceof Error ? err.message : err),
+        });
+      } catch (err) {
+        console.error('\nCould not start voice mode:', err instanceof Error ? err.message : err);
+        console.error('Falling back to typed input.\n');
+      }
+    }
+
     rl.prompt();
 
     rl.on('line', async (line: string) => {
@@ -858,6 +901,7 @@ program
 
     rl.on('close', async () => {
       isClosed = true;
+      voice?.stop();
       const intakeCompleteMsg = lang === 'es' ? '\n--- Entrevista Completada ---' : '\n--- Intake Complete ---';
       console.error(intakeCompleteMsg);
       // Flush any remaining buffer
